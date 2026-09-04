@@ -15,3 +15,15 @@ spring:
   h2:
     console:
       enabled: true
+  data:
+    rest:
+      base-path: /api
+      default-page-size: 20
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: alpha
+    tagsSorter: alpha

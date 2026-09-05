@@ -22,15 +22,18 @@ public class CalculationService {
     private final VariableMappingRepository variableMappingRepository;
     private final AccountBalanceRepository accountBalanceRepository;
     private final CalculationAuditRepository auditRepository;
+    private final GlobalVariableRepository globalVariableRepository;
 
     public CalculationService(FormulaRepository formulaRepository, 
                               VariableMappingRepository variableMappingRepository, 
                               AccountBalanceRepository accountBalanceRepository, 
-                              CalculationAuditRepository auditRepository) {
+                              CalculationAuditRepository auditRepository,
+                              GlobalVariableRepository globalVariableRepository) {
         this.formulaRepository = formulaRepository;
         this.variableMappingRepository = variableMappingRepository;
         this.accountBalanceRepository = accountBalanceRepository;
         this.auditRepository = auditRepository;
+        this.globalVariableRepository = globalVariableRepository;
     }
 
     public CalculationAudit calcularBase(String codBc) {
@@ -52,10 +55,11 @@ public class CalculationService {
             variables.merge(map.getNomeVariavel(), sum, BigDecimal::add);
         }
 
-        // 3. Adicionar as alíquotas (mockadas para a PoC)
-        variables.put("pIBSMun", new BigDecimal("2.0"));
-        variables.put("pIBSUF", new BigDecimal("1.0"));
-        variables.put("pCBS", new BigDecimal("9.0"));
+        // 3. Adicionar as variáveis globais e alíquotas cadastradas no banco
+        List<GlobalVariable> globais = globalVariableRepository.findAll();
+        for (GlobalVariable varGlobal : globais) {
+            variables.put(varGlobal.getName(), varGlobal.getValue());
+        }
 
         // 4. Preparar o contexto de execução segura (SpEL) limitando RCE
         ExpressionParser parser = new SpelExpressionParser();

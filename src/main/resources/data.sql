@@ -13,3 +13,8 @@ INSERT INTO tb_variavel_mapeamento (nome_variavel, operacao, cod_trib_codigo) VA
 
 -- Fórmulas (Tabela 12) - CodBC 1005 (Simplificado)
 INSERT INTO tb_formula (cod_bc, expressao_spel) VALUES ('1005', '(#vRecTrib - #vDespDedut) / (1 + ((#pIBSMun + #pIBSUF + #pCBS) / 100))');
+
+-- Variáveis Globais (Alíquotas e Valores Fixos)
+INSERT INTO tb_variavel_global (name, valor) VALUES ('pIBSMun', 2.00);
+INSERT INTO tb_variavel_global (name, valor) VALUES ('pIBSUF', 1.00);
+INSERT INTO tb_variavel_global (name, valor) VALUES ('pCBS', 9.00);
